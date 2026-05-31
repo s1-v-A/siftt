@@ -1,0 +1,19 @@
+# Python virtual environments (never track dependencies)
+.venv/
+env/
+venv/
+ENV/
+
+# Python caching footprints
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local temporary file storage (prevents uploading users' raw data to GitHub)
+storage/
+tmp/
+
+# Operating System files
+.DS_Store
+Thumbs.db

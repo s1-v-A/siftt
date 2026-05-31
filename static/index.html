@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroDrop | Effortless Temporary File Sharing</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 40px; }
+        .card { background: white; padding: 24px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        button { background: #0070f3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0051cb; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>AeroDrop</h1>
+        <p>Modern, ephemeral, single-file sharing system.</p>
+        <hr>
+
+        <div id="home-view">
+            <p>Need to send a file? Spin up a temporary secure room instantly.</p>
+            <button id="create-room-btn">Create Sharing Room</button>
+        </div>
+
+        <div id="room-view" class="hidden">
+            <h3>Active Room: <span id="room-code-display" style="color:#0070f3;">-----</span></h3>
+            <p>Share this URL with anyone to pass data seamlessly.</p>
+            <div id="file-area">
+                <p style="color: #666; font-style: italic;">Room workspace active.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/app.js"></script>
+</body>
+</html>
