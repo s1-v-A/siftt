@@ -22,6 +22,13 @@
         <div id="home-view">
             <p>Need to send a file? Spin up a temporary secure room instantly.</p>
             <button id="create-room-btn">Create Sharing Room</button>
+            
+            <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #ccc;">
+            <p>Received a code? Enter it below to download files.</p>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="join-room-input" placeholder="e.g., X7K92" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-transform: uppercase; flex: 1;">
+                <button id="join-room-btn" style="background: #4b5563;">Join Room</button>
+            </div>
         </div>
 
         <div id="room-view" class="hidden">
