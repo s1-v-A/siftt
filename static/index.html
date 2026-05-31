@@ -27,11 +27,18 @@
         <div id="room-view" class="hidden">
             <h3>Active Room: <span id="room-code-display" style="color:#0070f3;">-----</span></h3>
             <p>Share this URL with anyone to pass data seamlessly.</p>
+            
             <div id="file-area">
-                <p style="color: #666; font-style: italic;">Room workspace active.</p>
+                <div style="margin-bottom: 20px;">
+                    <input type="file" id="file-selector">
+                    <button id="upload-btn" style="background: #10b981; padding: 6px 12px; font-size: 14px;">Upload</button>
+                </div>
+
+                <h4>Files in this room:</h4>
+                <ul id="file-list" style="padding-left: 20px; color: #555;">
+                    </ul>
             </div>
         </div>
-    </div>
 
     <script src="/assets/app.js"></script>
 </body>

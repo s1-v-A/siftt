@@ -9,6 +9,9 @@ app = FastAPI(title="AeroDrop Engine")
 
 vault_database = {}
 
+STORAGE_DIR = os.path.join(os.path.dirname(__file__), "storage")
+os.makedirs(STORAGE_DIR, exist_ok=True)
+
 def generate_room_code(length: int = 5) -> str:   #adding room code generator
     """
     Generates a unique, uppercase alphanumeric string.
@@ -43,14 +46,9 @@ async def create_room():
     }
 
 
-
-# Determine the absolute path to static files folder on system
 static_dir = os.path.join(os.path.dirname(__file__), "static")
-
-# Mount the asset folder so the browser can download CSS or JS files
 app.mount("/assets", StaticFiles(directory=static_dir), name="static")
 
-# Fallback Route: Serve our plain HTML file for any room URL path
 @app.get("/{catchall:path}")
 async def serve_frontend(catchall: str):
     """
@@ -58,4 +56,36 @@ async def serve_frontend(catchall: str):
     over our single-page index.html interface file.
     """
     return FileResponse(os.path.join(static_dir, "index.html"))
+
+
+
+from fastapi import UploadFile, File, HTTPException
+
+
+
+# file upload route
+
+@app.post("/api/rooms/{room_code}/upload")
+async def upload_file_to_room(room_code: str, file: UploadFile = File(...)):
+    """
+    Accepts a raw binary file stream, saves it to the local Linux storage folder,
+    and attaches the file metadata to the active RAM room.
+    """
+    if room_code not in vault_database:
+        raise HTTPException(status_code=404, detail="Target room does not exist or has expired.")
+    
+    safe_filename = f"{room_code}_{file.filename}"
+    file_save_path = os.path.join(STORAGE_DIR, safe_filename)
+    
+    with open(file_save_path, "wb") as buffer:
+        content = await file.read()
+        buffer.write(content)
+        
+    vault_database[room_code]["files"].append(file.filename)
+    
+    return {
+        "status": "success",
+        "filename": file.filename,
+        "message": f"File successfully anchored to room {room_code}"
+    }
 
