@@ -17,18 +17,18 @@ A high-performance, minimalist, ephemeral file-sharing engine. Drop a file, grab
 ## Local Installation & Deployment
 
 1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/YOUR_USERNAME/sifTT.git](https://github.com/YOUR_USERNAME/sifTT.git)
+    ```
+     git clone [https://github.com/s1-v-A/siftt.git](https://github.com/s1-v-A/siftt.git)
     cd sifTT
     ```
 
 2.  **Install dependencies:**
-    ```bash
+    ```
     pip install fastapi uvicorn
     ```
 
 3.  **Boot the Engine:**
-    ```bash
+    ```
     uvicorn main:app --reload
     ```
     Open your browser and navigate to `http://127.0.0.1:8000`.
