@@ -7,12 +7,9 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-# =====================================================================
-# SYSTEM INITIALIZATION & SAFETY CONFIGS
-# =====================================================================
-app = FastAPI(title="AeroDrop Engine")
+app = FastAPI(title="siftt Engine")
 
-# Global In-Memory Registry Mapping Room Codes to Active Sessions
+
 vault_database = {}
 
 # Local Disk Path Config for Storing Uploaded Binaries
@@ -20,12 +17,9 @@ STORAGE_DIR = os.path.join(os.path.dirname(__file__), "storage")
 os.makedirs(STORAGE_DIR, exist_ok=True)
 
 # Safety Caps
-MAX_FILE_SIZE = 50 * 1024 * 1024  # Enforce absolute maximum 50MB file size limit
+MAX_FILE_SIZE = 50 * 1024 * 1024
 
 
-# =====================================================================
-# UTILITY HELPER FUNCTIONS & SECURITY PURIFIERS
-# =====================================================================
 def generate_room_code(length: int = 5) -> str:
     """
     Generates a unique, uppercase alphanumeric string.
@@ -49,9 +43,6 @@ def sanitize_filename(filename: str) -> str:
     return sanitized
 
 
-# =====================================================================
-# ASYNCHRONOUS BACKGROUND SWEEPER (Auto-Destruct Loop)
-# =====================================================================
 async def cleanup_expired_rooms_loop():
     """
     Asynchronous daemon loop. Sweeps RAM and storage disk every 60 seconds 
@@ -86,9 +77,6 @@ async def startup_event():
     asyncio.create_task(cleanup_expired_rooms_loop())
 
 
-# =====================================================================
-# CORE API ENDPOINTS
-# =====================================================================
 
 @app.post("/api/rooms/create")
 async def create_room():
@@ -115,14 +103,12 @@ async def upload_file_to_room(room_code: str, file: UploadFile = File(...)):
     if room_code not in vault_database:
         raise HTTPException(status_code=404, detail="Target room does not exist or has expired.")
     
-    # Clean filename against directory breakout injections
     clean_name = sanitize_filename(file.filename)
     safe_filename = f"{room_code}_{clean_name}"
     file_save_path = os.path.join(STORAGE_DIR, safe_filename)
     
     file_size = 0
     try:
-        # Stream file write in 1MB allocations to prevent RAM overflows and verify file size limit
         with open(file_save_path, "wb") as buffer:
             while chunk := await file.read(1024 * 1024):
                 file_size += len(chunk)
@@ -193,10 +179,6 @@ async def download_file_from_room(room_code: str, filename: str):
         media_type="application/octet-stream"
     )
 
-
-# =====================================================================
-# STATIC ASSETS & SINGLE-PAGE ROUTING SYSTEM (Must remain at the bottom)
-# =====================================================================
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 

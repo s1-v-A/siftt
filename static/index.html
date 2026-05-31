@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* Hero Text Glowing Animation using custom rare colors */
         @keyframes glow {
             0%, 100% { text-shadow: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(45, 212, 191, 0.2); }
             50% { text-shadow: 0 0 40px rgba(99, 102, 241, 0.7), 0 0 80px rgba(20, 184, 166, 0.4); }
@@ -17,7 +16,6 @@
             animation: glow 3s ease-in-out infinite;
         }
 
-        /* Floating Card Animation */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
@@ -25,8 +23,6 @@
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
-
-        /* Fade-in Up Animation for scroll entrance */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -35,7 +31,6 @@
             animation: fadeInUp 1s ease-out forwards;
         }
 
-        /* Custom Slow Blinking Animation for the Scroll Prompt */
         @keyframes slowBlink {
             0%, 100% { opacity: 0.2; transform: translateY(0); }
             50% { opacity: 0.9; transform: translateY(6px); }

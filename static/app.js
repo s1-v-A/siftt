@@ -12,22 +12,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     let activeRoomCode = null;
     let isSender = false;
 
-    // =====================================================================
-    // UI BUILDER: Upgraded for the Dark Theme
-    // =====================================================================
     function appendFileToUiList(filename) {
-        const li = document.createElement("li");
+        const li = document.createElement("li");  
         
-        // Tailwind styling for the list item container
         li.className = "flex items-center gap-3 p-4 bg-gray-900/40 rounded-xl border border-gray-700/50 hover:border-gray-600 transition-colors mt-2";
-
-        // Add a clean SVG file icon to every list item
+        
         const iconContainer = document.createElement("div");
         iconContainer.innerHTML = `<svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
         li.appendChild(iconContainer);
 
         if (isSender) {
-            // SENDER ROLE: Clean text + Emerald 'Uploaded' Badge
             const textSpan = document.createElement("span");
             textSpan.className = "text-gray-300 flex-grow font-medium truncate";
             textSpan.textContent = filename;
@@ -39,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.appendChild(textSpan);
             li.appendChild(badge);
         } else {
-            // RECEIVER ROLE: Blue clickable download hyperlink
             const downloadLink = document.createElement("a");
             downloadLink.href = `/api/rooms/${activeRoomCode}/files/${filename}`;
             downloadLink.className = "text-blue-400 hover:text-blue-300 underline underline-offset-4 flex-grow font-medium transition-colors truncate";
@@ -51,9 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         fileList.appendChild(li);
     }
 
-    // =====================================================================
-    // ROUTING & API CALLS
-    // =====================================================================
     async function checkUrlForRoom() {
         const urlPath = window.location.pathname;
         const pathSegments = urlPath.split("/");
@@ -84,7 +74,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error("Routing failure:", error);
             }
         } else {
-            // If we are just on the base homepage, make sure the home view is visible
             showHomeView();
         }
     }
@@ -94,13 +83,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         roomView.classList.add("hidden");
         activeRoomCode = null;
     }
-
-    // Fire the check immediately on page load
     await checkUrlForRoom();
 
-    // =====================================================================
-    // EVENT LISTENERS
-    // =====================================================================
     createRoomBtn.addEventListener("click", async () => {
         try {
             const response = await fetch("/api/rooms/create", { method: "POST" });
@@ -135,7 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.pushState({}, "", `/room/${activeRoomCode}`);
         fileList.innerHTML = "";
         
-        // FIXED: Now accurately using the corrected routing function
         await checkUrlForRoom();
         joinRoomInput.value = "";
     });
