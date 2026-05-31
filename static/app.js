@@ -54,10 +54,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     // =====================================================================
     // ROUTING & API CALLS
     // =====================================================================
-    async function initializeApplicationRoute() {
+    async function checkUrlForRoom() {
         const urlPath = window.location.pathname;
         const pathSegments = urlPath.split("/");
 
+        // Only try to fetch room data if the URL actually looks like /room/CODE
         if (pathSegments[1] === "room" && pathSegments[2]) {
             const codeFromUrl = pathSegments[2].toUpperCase();
 
@@ -70,19 +71,36 @@ document.addEventListener("DOMContentLoaded", async () => {
                     homeView.classList.add("hidden");
                     roomView.classList.remove("hidden");
                     fileList.innerHTML = "";
-                    data.files.forEach(filename => appendFileToUiList(filename));
+                    
+                    if (data.files && data.files.length > 0) {
+                        data.files.forEach(filename => appendFileToUiList(filename));
+                    }
                 } else {
                     alert("This sharing room link has expired or never existed.");
                     window.history.pushState({}, "", "/");
+                    showHomeView();
                 }
             } catch (error) {
                 console.error("Routing failure:", error);
             }
+        } else {
+            // If we are just on the base homepage, make sure the home view is visible
+            showHomeView();
         }
     }
 
-    await initializeApplicationRoute();
+    function showHomeView() {
+        homeView.classList.remove("hidden");
+        roomView.classList.add("hidden");
+        activeRoomCode = null;
+    }
 
+    // Fire the check immediately on page load
+    await checkUrlForRoom();
+
+    // =====================================================================
+    // EVENT LISTENERS
+    // =====================================================================
     createRoomBtn.addEventListener("click", async () => {
         try {
             const response = await fetch("/api/rooms/create", { method: "POST" });
@@ -97,7 +115,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 roomView.classList.remove("hidden");
                 fileList.innerHTML = ""; 
             } else {
-                // FIXED: Explicitly alert if the backend refuses to generate a code
                 alert(`Server returned an error: ${response.status}. Check your Uvicorn terminal!`);
             }
         } catch (error) {
@@ -118,7 +135,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.pushState({}, "", `/room/${activeRoomCode}`);
         fileList.innerHTML = "";
         
-        await initializeApplicationRoute();
+        // FIXED: Now accurately using the corrected routing function
+        await checkUrlForRoom();
         joinRoomInput.value = "";
     });
 
