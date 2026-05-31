@@ -128,7 +128,7 @@ async def download_file_from_room(room_code: str, filename: str):
 # STATIC ASSETS & SINGLE-PAGE ROUTING SYSTEM (Must remain at the bottom)
 # =====================================================================
 static_dir = os.path.join(os.path.dirname(__file__), "static")
-app.mount("/assets", StaticFiles(directory=static_dir), name="static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 @app.get("/{catchall:path}")
 async def serve_frontend(catchall: str):
